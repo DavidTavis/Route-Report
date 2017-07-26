@@ -1,5 +1,7 @@
 package com.report.route.activity;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -30,6 +32,17 @@ public class RegistrationActivity extends AppCompatActivity {
     @BindView(R.id.et_password) EditText etPassword;
     @BindView(R.id.btn_submit) Button btnSubmit;
 
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String nickName;
+    private String password;
+
+    private boolean allDataPresents;
+
+    private Integer errCode;
+    private String sessionID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,17 +51,36 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.btn_submit)
-    public void submitRegistration(Button button){
-        RegistrationService registrationService = ApiFactory.getRegistrationService();
-        Call<RegistrationResponse> call = registrationService.registration(createTestRegistrationRequest());
+    public void onClickSubmit(Button button){
 
+        initializeVariable();
+        fieldIsEmpty();
+
+        if(allDataPresents){
+            registration();
+        }
+
+    }
+
+    private void registration() {
+
+        RegistrationService registrationService = ApiFactory.getRegistrationService();
+        Call<RegistrationResponse> call = registrationService.registration(createRegistrationRequest());
         call.enqueue(new Callback<RegistrationResponse>() {
+
             @Override
             public void onResponse(Call<RegistrationResponse> call, Response<RegistrationResponse> response) {
                 if (response.isSuccessful()) {
                     RegistrationResponse registrationResponse = response.body();
-                    Toast.makeText(RegistrationActivity.this, registrationResponse.toString(), Toast.LENGTH_LONG).show();
-                    Log.d("myLog",registrationResponse.toString());
+                    errCode = registrationResponse.getErrCode();
+                    sessionID = registrationResponse.getSessionIdOut();
+                    if(errCode == 1){
+                        Toast.makeText(RegistrationActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
+                        new StartMainActivityTask().execute();
+                    }else if(errCode == 11){
+                        Toast.makeText(RegistrationActivity.this, "Current user is already exists", Toast.LENGTH_SHORT).show();
+                        new StartMainActivityTask().execute();
+                    }
                 } else {
                     Log.d("myLog", "Error");
                 }
@@ -59,26 +91,80 @@ public class RegistrationActivity extends AppCompatActivity {
 
             }
         });
+
     }
 
+    private boolean fieldIsEmpty() {
 
-    private Registration createTestRegistrationRequest() {
+        allDataPresents = true;
 
-        String firstName = etFirstName.getText().toString();
-        String lastName = etLastName.getText().toString();
-        String email = etMail.getText().toString();
-        String nickName = etNickName.getText().toString();
-        String password = etPassword.getText().toString();
+        if(firstName.equals("")) {
+            Toast.makeText(this, "Field First name is empty", Toast.LENGTH_SHORT).show();
+            allDataPresents = false;
+        }
+        else if(lastName.equals("")){
+            Toast.makeText(this, "Field Last name is empty", Toast.LENGTH_SHORT).show();
+            allDataPresents = false;
+        }
+        else if(email.equals("")) {
+            Toast.makeText(this, "Field Email is empty", Toast.LENGTH_SHORT).show();
+            allDataPresents = false;
+        }
+        else if(nickName.equals("")){
+            Toast.makeText(this, "Field Nick name is empty", Toast.LENGTH_SHORT).show();
+            allDataPresents = false;
+        }
+        else if(password.equals("")){
+            Toast.makeText(this, "Field Password is empty", Toast.LENGTH_SHORT).show();
+            allDataPresents = false;
+        }
 
-        Parameters parameters = new Parameters("0.0.0.0",firstName,lastName,
-                email,"2016-09-23 22:34:00",
-                nickName, password,0,"OS","BROWSER",22.00f,22.00f);
-//        Parameters parameters = new Parameters("0.0.0.0","Name","Name",
-//                "EMAIL@EMAIL_EMAIL.COM","2016-09-23 22:34:00",
-//                "NICK", "111111",0,"OS","BROWSER",22.00f,22.00f);
+        return allDataPresents;
+
+    }
+
+    private void initializeVariable() {
+
+        firstName = etFirstName.getText().toString();
+        lastName = etLastName.getText().toString();
+        email = etMail.getText().toString();
+        nickName = etNickName.getText().toString();
+        password = etPassword.getText().toString();
+
+    }
+
+    private Registration createRegistrationRequest() {
+
+        Parameters parameters = new Parameters("0.0.0.0",firstName,lastName,email,"2016-09-23 22:34:00",
+                                                nickName, password,0,"OS","BROWSER",22.00f,22.00f);
 
         return new Registration(parameters);
 
     }
 
+    public class StartMainActivityTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            try {
+                Thread.sleep(2000);
+            }catch (InterruptedException ie){
+                ie.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+            intent.putExtra("errCode", errCode);
+            intent.putExtra("email", email);
+            intent.putExtra("sessionID", sessionID);
+
+            startActivity(intent);
+            overridePendingTransition(R.anim.open_next,R.anim.close_main);
+        }
+    }
 }

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Route-Report"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="30dp"/>
+
+    <TextView
+        android:id="@+id/tv_title_user_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Email:"
+        android:textSize="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="70dp"
+        android:layout_below="@+id/tv_title"/>
+    <TextView
+        android:id="@+id/tv_user_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="example@mail.ru"
+        android:textSize="16dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/tv_title_user_email"/>
+
+    <TextView
+        android:id="@+id/tv_title_err_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Error code:"
+        android:textSize="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/tv_user_email"/>
+    <TextView
+        android:id="@+id/tv_err_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="11"
+        android:textSize="16dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/tv_title_err_code"/>
+
+    <TextView
+        android:id="@+id/tv_title_session_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Session ID:"
+        android:textSize="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/tv_err_code"/>
+
+    <TextView
+        android:id="@+id/tv_session_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="3123:2323232"
+        android:textSize="16dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/tv_title_session_id"/>
+
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="LOGOUT"
+        android:textSize="20dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/tv_session_id" />
+
+</RelativeLayout>

@@ -15,19 +15,6 @@ public class Registration {
         super();
         this.parameters = parameters;
     }
-//    public Registration(String name, Parameters parameters) {
-//        super();
-//        this.name = name;
-//        this.parameters = parameters;
-//    }
-
-    public Parameters getParameters() {
-        return parameters;
-    }
-
-    public void setParameters(Parameters parameters) {
-        this.parameters = parameters;
-    }
 
     @Override
     public String toString() {
@@ -36,4 +23,6 @@ public class Registration {
                 ", parameters=" + parameters +
                 '}';
     }
+
+
 }
